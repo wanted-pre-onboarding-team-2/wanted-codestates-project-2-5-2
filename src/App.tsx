@@ -1,9 +1,14 @@
 import React from "react";
+import "./styles.css";
+
+import Canvas from "./components/Canvas";
 
 function App() {
-  console.log("Hello");
-
-  return <div>Hello</div>;
+  return (
+    <>
+      <Canvas />
+    </>
+  );
 }
 
 export default App;
