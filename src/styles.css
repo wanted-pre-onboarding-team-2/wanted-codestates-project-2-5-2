@@ -5,6 +5,9 @@
 
 .canvas {
   background-color: gray;
+  background-image: url("../src/assets/image.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
   position: absolute;
   width: 100vh;
   height: 100vh;
