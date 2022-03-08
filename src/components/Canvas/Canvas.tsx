@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 
 import HighLight from "./HighLight";
-import { HighLightType } from "src/App";
+import { HighLightType } from "../../App";
+import {useLocalStorage} from "../../hooks/useLocalStorage"
 
 interface Props {
   highlights: HighLightType[];
@@ -16,6 +17,10 @@ function Canvas({ highlights, setHighlights }: Props) {
   const isMouseDown = useRef(false);
   const canvasRef = useRef<HTMLDivElement>(null);
   const clientCoordinates = useRef({ top: 0, left: 0 });
+
+  const [name, setName] = useState<string>("");
+  const [savedRepos, setSavedRepos] = useLocalStorage("highlights", []);
+
 
   useEffect(() => {
     const canvasOffset = canvasRef.current?.getBoundingClientRect();
@@ -64,11 +69,12 @@ function Canvas({ highlights, setHighlights }: Props) {
       y: lastMouseY,
       width: mouseX - lastMouseX,
       height: mouseY - lastMouseY,
+      name: name,
     };
     setHighlights([...highlights, highlight]);
+    setSavedRepos([...highlights,  highlight]);
     setDrawing(blankState);
-  };
-
+};
   return (
     <div
       className="canvas"

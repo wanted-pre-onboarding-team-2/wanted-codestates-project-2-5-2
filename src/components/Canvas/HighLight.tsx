@@ -1,6 +1,6 @@
 import React from "react";
 
-import { HighLightType } from "./Canvas";
+import { HighLightType } from "../../App";
 
 type HighLightProps = {
   index: number;

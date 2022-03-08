@@ -23,6 +23,9 @@
   ],
   "plugins": ["prettier", "@typescript-eslint"],
   "rules": {
-    "prettier/prettier": ["error", { "endOfLine": "auto" }]
+    "prettier/prettier": ["error", { "endOfLine": "auto" }], 
+    "@typescript-eslint/no-unsafe-return":0,
+    "@typescript-eslint/no-unsafe-call":0,
+    "@typescript-eslint/no-unsafe-assignment":0,
   }
 }
