@@ -18,7 +18,6 @@ function Canvas({ highlights, setHighlights }: Props) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const clientCoordinates = useRef({ top: 0, left: 0 });
 
-  const [name, setName] = useState<string>("");
   const [savedRepos, setSavedRepos] = useLocalStorage("highlights", []);
 
 
@@ -63,18 +62,26 @@ function Canvas({ highlights, setHighlights }: Props) {
     const lastMouseY = drawing.y;
     const mouseX = event.clientX - clientCoordinates.current.left;
     const mouseY = event.clientY - clientCoordinates.current.top;
-    const highlight: HighLightType = {
+    
+    let memo = window.prompt("메모해주세요!!🔥")
+    console.log(memo)
+    if(memo){
+
+      const highlight: HighLightType = {
       id: nextId.current++,
       x: lastMouseX,
       y: lastMouseY,
       width: mouseX - lastMouseX,
       height: mouseY - lastMouseY,
-      name: name,
+      name: memo,
     };
+    
     setHighlights([...highlights, highlight]);
     setSavedRepos([...highlights,  highlight]);
     setDrawing(blankState);
+  }
 };
+
   return (
     <div
       className="canvas"
