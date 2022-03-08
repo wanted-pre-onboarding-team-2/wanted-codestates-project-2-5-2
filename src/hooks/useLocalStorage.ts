@@ -30,5 +30,3 @@ export const useLocalStorage = (key: string, initialValue: HighLightType[]) => {
 
   return [storageItems, setLocalStorage];
 };
-
-

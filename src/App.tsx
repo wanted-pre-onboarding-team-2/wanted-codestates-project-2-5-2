@@ -3,7 +3,7 @@ import "./styles.css";
 
 import Canvas from "./components/Canvas";
 import List from "./components/List/List";
-import { useLocalStorage } from './hooks/useLocalStorage';
+import { useLocalStorage } from "./hooks/useLocalStorage";
 
 export type HighLightType = {
   id: string;
@@ -15,13 +15,13 @@ export type HighLightType = {
 };
 
 function App() {
-  const [highlights, setHighlights] = useLocalStorage('highlight', []);
+  const [highlights, setHighlights] = useLocalStorage("highlight", []);
 
   return (
-    <div className="container">
+    <>
       <List highlights={highlights} setHighlights={setHighlights} />
       <Canvas highlights={highlights} setHighlights={setHighlights} />
-    </div>
+    </>
   );
 }
 

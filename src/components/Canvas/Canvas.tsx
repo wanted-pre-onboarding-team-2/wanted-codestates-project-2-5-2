@@ -4,14 +4,15 @@ import { v4 } from "uuid";
 import HighLight from "./HighLight";
 import { HighLightType } from "../../App";
 
-interface Props {
+interface CanvasProps {
   highlights: HighLightType[];
   setHighlights: React.Dispatch<React.SetStateAction<HighLightType[]>>;
 }
 
-function Canvas({ highlights, setHighlights }: Props) {
+function Canvas({ highlights, setHighlights }: CanvasProps) {
   const blankState = { x: 1, y: 1, width: 1, height: 1 };
   const [drawing, setDrawing] = useState(blankState);
+  const [isResizing, setIsResizing] = useState(false);
 
   const isMouseDown = useRef(false);
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -28,51 +29,59 @@ function Canvas({ highlights, setHighlights }: Props) {
   }, []);
 
   const handleMouseDown = (event: React.MouseEvent) => {
-    isMouseDown.current = true;
-    const mouseX = event.clientX - clientCoordinates.current.left;
-    const mouseY = event.clientY - clientCoordinates.current.top;
-    setDrawing({ x: mouseX, y: mouseY, width: 0, height: 0 });
+    console.log("[canvas]: mouse down");
+    if (!isResizing) {
+      isMouseDown.current = true;
+      const mouseX = event.clientX - clientCoordinates.current.left;
+      const mouseY = event.clientY - clientCoordinates.current.top;
+      setDrawing({ x: mouseX, y: mouseY, width: 0, height: 0 });
+    }
   };
 
   const handleMouseMove = (event: React.MouseEvent) => {
-    if (!isMouseDown.current) return;
-    const lastMouseX = drawing.x;
-    const lastMouseY = drawing.y;
-    const mouseX = event.clientX - clientCoordinates.current.left;
-    const mouseY = event.clientY - clientCoordinates.current.top;
-    const width = mouseX - lastMouseX;
-    const height = mouseY - lastMouseY;
-    setDrawing({
-      x: lastMouseX,
-      y: lastMouseY,
-      width: width,
-      height: height,
-    });
+    console.log("[canvas]: mouse move");
+    if (!isResizing) {
+      if (!isMouseDown.current) return;
+      const lastMouseX = drawing.x;
+      const lastMouseY = drawing.y;
+      const mouseX = event.clientX - clientCoordinates.current.left;
+      const mouseY = event.clientY - clientCoordinates.current.top;
+      const width = mouseX - lastMouseX;
+      const height = mouseY - lastMouseY;
+      setDrawing({
+        x: lastMouseX,
+        y: lastMouseY,
+        width: width,
+        height: height,
+      });
+    }
   };
 
   const handleMouseUp = (event: React.MouseEvent) => {
-    isMouseDown.current = false;
-    const lastMouseX = drawing.x;
-    const lastMouseY = drawing.y;
-    const mouseX = event.clientX - clientCoordinates.current.left;
-    const mouseY = event.clientY - clientCoordinates.current.top;
-    
-    let memo = window.prompt("아이템 이름을 입력해 주세요!!🔥")
-    if(memo){
-    const highlight: HighLightType = {
-      id: v4(),
-      x: lastMouseX,
-      y: lastMouseY,
-      width: mouseX - lastMouseX,
-      height: mouseY - lastMouseY,
-      name: memo,
-    };
-    
-    setHighlights([...highlights, highlight]);
-    setDrawing(blankState);
-  }
-};
+    console.log("[canvas]: mouse up");
+    if (!isResizing) {
+      isMouseDown.current = false;
+      const lastMouseX = drawing.x;
+      const lastMouseY = drawing.y;
+      const mouseX = event.clientX - clientCoordinates.current.left;
+      const mouseY = event.clientY - clientCoordinates.current.top;
 
+      const memo = window.prompt("아이템 이름을 입력해 주세요!!🔥");
+      if (memo) {
+        const highlight: HighLightType = {
+          id: v4(),
+          x: lastMouseX,
+          y: lastMouseY,
+          width: mouseX - lastMouseX,
+          height: mouseY - lastMouseY,
+          name: memo,
+        };
+
+        setHighlights([...highlights, highlight]);
+        setDrawing(blankState);
+      }
+    }
+  };
 
   return (
     <div
@@ -91,15 +100,19 @@ function Canvas({ highlights, setHighlights }: Props) {
           height: drawing.height,
         }}
       />
-      {highlights.map((highlight, index) => (
+      {highlights.map((highlight) => (
         <HighLight
           key={highlight.id}
-          index={index}
+          id={highlight.id}
           left={highlight.x}
           top={highlight.y}
           width={highlight.width}
           height={highlight.height}
+          clientTop={clientCoordinates.current.top}
+          clientLeft={clientCoordinates.current.left}
+          highlights={highlights}
           setHighlights={setHighlights}
+          setIsResizing={setIsResizing}
         />
       ))}
     </div>

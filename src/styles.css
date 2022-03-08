@@ -13,11 +13,11 @@
 
 .canvas {
   background: no-repeat url("/src/assets/image.jpg");
-  width: 500px;
-  height: 500px;
-  /* margin: 100px; */
+  position: absolute;
+  width: 100vh;
+  height: 100vh;
+  margin: 20px;
   cursor: crosshair;
-  margin-left: 50px;
 }
 
 .drawing {
@@ -36,9 +36,15 @@
 }
 
 .list {
-  width: 200px;
-  height: 500px;
+  position: fixed;
+  width: 300px;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
   background-color: white;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 10px;
 }
 
 .list-name {
