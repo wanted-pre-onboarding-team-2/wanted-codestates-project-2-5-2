@@ -30,45 +30,34 @@ function HightLight({
   const [resizable, setResizable] = useState(false);
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    const resizableElement = resizableRef.current as HTMLDivElement;
     const target = e.target as HTMLDivElement;
     const minimum_size = 20;
-    const original_width = parseFloat(
-      getComputedStyle(resizableRef.current as HTMLDivElement, null)
-        .getPropertyValue("width")
-        .replace("px", ""),
-    );
-    const original_height = parseFloat(
-      getComputedStyle(resizableRef.current as HTMLDivElement, null)
-        .getPropertyValue("height")
-        .replace("px", ""),
-    );
-    const original_x = (
-      resizableRef.current as HTMLDivElement
-    ).getBoundingClientRect().left;
-    const original_y = (
-      resizableRef.current as HTMLDivElement
-    ).getBoundingClientRect().top;
+
+    const original_width = resizableElement.getBoundingClientRect().width;
+    const original_height = resizableElement.getBoundingClientRect().height;
+
+    const original_x = resizableElement.getBoundingClientRect().left;
+    const original_y = resizableElement.getBoundingClientRect().top;
+
     const original_mouse_x = e.pageX;
     const original_mouse_y = e.pageY;
 
     const resize = (e: MouseEvent) => {
-      // const mouseX = e.pageX - clientLeft;
-      // const mouseY = e.pageY - clientTop;
-
       if (target.classList.contains("top-left")) {
         console.log("top-left");
         const width = original_width - (e.pageX - original_mouse_x);
         const height = original_height - (e.pageY - original_mouse_y);
         if (width > minimum_size) {
-          (resizableRef.current as HTMLDivElement).style.width = `${width}px`;
-          (resizableRef.current as HTMLDivElement).style.left = `${
-            original_x + (e.pageX - 20 - original_mouse_x)
+          resizableElement.style.width = `${width}px`;
+          resizableElement.style.left = `${
+            original_x + (e.pageX - clientLeft - original_mouse_x)
           }px`;
         }
         if (height > minimum_size) {
-          (resizableRef.current as HTMLDivElement).style.height = `${height}px`;
-          (resizableRef.current as HTMLDivElement).style.top = `${
-            original_y + (e.pageY - 20 - original_mouse_y)
+          resizableElement.style.height = `${height}px`;
+          resizableElement.style.top = `${
+            original_y + (e.pageY - clientTop - original_mouse_y)
           }px`;
         }
       } else if (target.classList.contains("top-right")) {
@@ -76,12 +65,12 @@ function HightLight({
         const width = original_width + (e.pageX - original_mouse_x);
         const height = original_height - (e.pageY - original_mouse_y);
         if (width > minimum_size) {
-          (resizableRef.current as HTMLDivElement).style.width = `${width}px`;
+          resizableElement.style.width = `${width}px`;
         }
         if (height > minimum_size) {
-          (resizableRef.current as HTMLDivElement).style.height = `${height}px`;
-          (resizableRef.current as HTMLDivElement).style.top = `${
-            original_y + (e.pageY - 20 - original_mouse_y)
+          resizableElement.style.height = `${height}px`;
+          resizableElement.style.top = `${
+            original_y + (e.pageY - clientTop - original_mouse_y)
           }px`;
         }
       } else if (target.classList.contains("bottom-right")) {
@@ -89,22 +78,22 @@ function HightLight({
         const width = original_width + (e.pageX - original_mouse_x);
         const height = original_height + (e.pageY - original_mouse_y);
         if (width > minimum_size) {
-          (resizableRef.current as HTMLDivElement).style.width = `${width}px`;
+          resizableElement.style.width = `${width}px`;
         }
         if (height > minimum_size) {
-          (resizableRef.current as HTMLDivElement).style.height = `${height}px`;
+          resizableElement.style.height = `${height}px`;
         }
       } else if (target.classList.contains("bottom-left")) {
         console.log("bottom-left");
         const height = original_height + (e.pageY - original_mouse_y);
         const width = original_width - (e.pageX - original_mouse_x);
         if (height > minimum_size) {
-          (resizableRef.current as HTMLDivElement).style.height = `${height}px`;
+          resizableElement.style.height = `${height}px`;
         }
         if (width > minimum_size) {
-          (resizableRef.current as HTMLDivElement).style.width = `${width}px`;
-          (resizableRef.current as HTMLDivElement).style.left = `${
-            original_x + (e.pageX - 20 - original_mouse_x)
+          resizableElement.style.width = `${width}px`;
+          resizableElement.style.left = `${
+            original_x + (e.pageX - clientLeft - original_mouse_x)
           }px`;
         }
       }
@@ -124,13 +113,11 @@ function HightLight({
     window.addEventListener("mouseup", stopResize);
   };
 
-  const handleDoubleClick = (e: React.MouseEvent) => {
+  const handleDoubleClick = () => {
     setResizable(true);
     setIsResizing(true);
   };
-  // 위치 변경
 
-  // return <div className="rectangle" style={{ left, top, width, height }} />;
   return (
     <S.Resizable
       x={left}

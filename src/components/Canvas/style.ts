@@ -2,18 +2,7 @@ import styled, { css } from "styled-components";
 
 type size = { x: number; y: number; width: number; height: number };
 
-export const Static = styled.div<size>`
-  position: absolute;
-  background: rgba(0, 0, 0, 0.2);
-  ${({ x, y, width, height }) => css`
-    left: ${x}px;
-    top: ${y}px;
-    width: ${width}px;
-    height: ${height}px;
-  `}
-`;
-
-export const Resizable = styled(Static)`
+export const Resizable = styled.div<size>`
   position: absolute;
   background: rgba(0, 0, 0, 0.2);
   ${({ x, y, width, height }) => css`
@@ -42,24 +31,24 @@ export const Resizer = styled.div`
   &.top-left {
     top: -5px;
     left: -5px;
-    cursor: nesw-resize;
+    cursor: nw-resize;
   }
 
   &.top-right {
     top: -5px;
     right: -5px;
-    cursor: nesw-resize;
+    cursor: ne-resize;
   }
 
   &.bottom-right {
     bottom: -5px;
     right: -5px;
-    cursor: nesw-resize;
+    cursor: se-resize;
   }
 
   &.bottom-left {
     bottom: -5px;
     left: -5px;
-    cursor: nesw-resize;
+    cursor: sw-resize;
   }
 `;
