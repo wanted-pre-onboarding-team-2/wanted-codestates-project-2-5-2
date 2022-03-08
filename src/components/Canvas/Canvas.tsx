@@ -83,6 +83,7 @@ function Canvas() {
     <div
       className="canvas"
       ref={canvasRef}
+      onClick={() => setIsResizing(false)}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
@@ -104,6 +105,8 @@ function Canvas() {
           top={highlight.y}
           width={highlight.width}
           height={highlight.height}
+          clientTop={clientCoordinates.current.top}
+          clientLeft={clientCoordinates.current.left}
           setHighlights={setHighlights}
           setIsResizing={setIsResizing}
         />
