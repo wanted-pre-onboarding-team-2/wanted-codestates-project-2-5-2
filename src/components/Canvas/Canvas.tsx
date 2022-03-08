@@ -17,8 +17,6 @@ function Canvas({ highlights, setHighlights }: Props) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const clientCoordinates = useRef({ top: 0, left: 0 });
 
-  const [name, setName] = useState<string>("abc");
-
   useEffect(() => {
     const canvasOffset = canvasRef.current?.getBoundingClientRect();
     if (canvasOffset) {
@@ -58,17 +56,24 @@ function Canvas({ highlights, setHighlights }: Props) {
     const lastMouseY = drawing.y;
     const mouseX = event.clientX - clientCoordinates.current.left;
     const mouseY = event.clientY - clientCoordinates.current.top;
+    
+    let memo = window.prompt("아이템 이름을 입력해 주세요!!🔥")
+    if(memo){
     const highlight: HighLightType = {
       id: v4(),
       x: lastMouseX,
       y: lastMouseY,
       width: mouseX - lastMouseX,
       height: mouseY - lastMouseY,
-      name: name,
+      name: memo,
     };
+    
     setHighlights([...highlights, highlight]);
     setDrawing(blankState);
-  };
+  }
+};
+
+
   return (
     <div
       className="canvas"
