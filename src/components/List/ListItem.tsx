@@ -31,6 +31,12 @@ function ListItem({ id, name, highlights, setHighlights }: ListItemProps) {
     });
   };
 
+  const handleKeyUp = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleEdit();
+    }
+  };
+
   const handleDelete = () => {
     const result = highlights.filter((highlight) => highlight.id !== id);
     setHighlights(result);
@@ -43,6 +49,7 @@ function ListItem({ id, name, highlights, setHighlights }: ListItemProps) {
           defaultValue={highLightname}
           onClick={handleEdit}
           onBlur={handleEdit}
+          onKeyUp={handleKeyUp}
           ref={inputRef}
         />
       ) : (
