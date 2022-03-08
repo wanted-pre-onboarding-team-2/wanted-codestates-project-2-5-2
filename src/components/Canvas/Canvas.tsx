@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
+import { v4 } from "uuid";
 
 import HighLight from "./HighLight";
 import { HighLightType } from "../../App";
-import {useLocalStorage} from "../../hooks/useLocalStorage"
 
 interface Props {
   highlights: HighLightType[];
@@ -12,15 +12,12 @@ interface Props {
 function Canvas({ highlights, setHighlights }: Props) {
   const blankState = { x: 1, y: 1, width: 1, height: 1 };
   const [drawing, setDrawing] = useState(blankState);
-  const nextId = useRef(0);
 
   const isMouseDown = useRef(false);
   const canvasRef = useRef<HTMLDivElement>(null);
   const clientCoordinates = useRef({ top: 0, left: 0 });
 
-  const [name, setName] = useState<string>("");
-  const [savedRepos, setSavedRepos] = useLocalStorage("highlights", []);
-
+  const [name, setName] = useState<string>("abc");
 
   useEffect(() => {
     const canvasOffset = canvasRef.current?.getBoundingClientRect();
@@ -47,14 +44,12 @@ function Canvas({ highlights, setHighlights }: Props) {
     const mouseY = event.clientY - clientCoordinates.current.top;
     const width = mouseX - lastMouseX;
     const height = mouseY - lastMouseY;
-    console.log(mouseX, mouseY, width, height);
     setDrawing({
       x: lastMouseX,
       y: lastMouseY,
       width: width,
       height: height,
     });
-    console.log(drawing);
   };
 
   const handleMouseUp = (event: React.MouseEvent) => {
@@ -64,7 +59,7 @@ function Canvas({ highlights, setHighlights }: Props) {
     const mouseX = event.clientX - clientCoordinates.current.left;
     const mouseY = event.clientY - clientCoordinates.current.top;
     const highlight: HighLightType = {
-      id: nextId.current++,
+      id: v4(),
       x: lastMouseX,
       y: lastMouseY,
       width: mouseX - lastMouseX,
@@ -72,9 +67,8 @@ function Canvas({ highlights, setHighlights }: Props) {
       name: name,
     };
     setHighlights([...highlights, highlight]);
-    setSavedRepos([...highlights,  highlight]);
     setDrawing(blankState);
-};
+  };
   return (
     <div
       className="canvas"
@@ -92,10 +86,10 @@ function Canvas({ highlights, setHighlights }: Props) {
           height: drawing.height,
         }}
       />
-      {highlights.map((highlight) => (
+      {highlights.map((highlight, index) => (
         <HighLight
           key={highlight.id}
-          index={highlight.id}
+          index={index}
           left={highlight.x}
           top={highlight.y}
           width={highlight.width}
