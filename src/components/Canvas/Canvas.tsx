@@ -14,6 +14,7 @@ function Canvas() {
   const blankState = { x: 1, y: 1, width: 1, height: 1 };
   const [drawing, setDrawing] = useState(blankState);
   const [highlights, setHighlights] = useState<HighLightType[]>([]);
+  const [isResizing, setIsResizing] = useState(false);
   const nextId = useRef(0);
 
   const isMouseDown = useRef(false);
@@ -31,45 +32,51 @@ function Canvas() {
   }, []);
 
   const handleMouseDown = (event: React.MouseEvent) => {
-    isMouseDown.current = true;
-    const mouseX = event.clientX - clientCoordinates.current.left;
-    const mouseY = event.clientY - clientCoordinates.current.top;
-    setDrawing({ x: mouseX, y: mouseY, width: 0, height: 0 });
+    if (!isResizing) {
+      isMouseDown.current = true;
+      const mouseX = event.clientX - clientCoordinates.current.left;
+      const mouseY = event.clientY - clientCoordinates.current.top;
+      setDrawing({ x: mouseX, y: mouseY, width: 0, height: 0 });
+    }
   };
 
   const handleMouseMove = (event: React.MouseEvent) => {
-    if (!isMouseDown.current) return;
-    const lastMouseX = drawing.x;
-    const lastMouseY = drawing.y;
-    const mouseX = event.clientX - clientCoordinates.current.left;
-    const mouseY = event.clientY - clientCoordinates.current.top;
-    const width = mouseX - lastMouseX;
-    const height = mouseY - lastMouseY;
-    console.log(mouseX, mouseY, width, height);
-    setDrawing({
-      x: lastMouseX,
-      y: lastMouseY,
-      width: width,
-      height: height,
-    });
-    console.log(drawing);
+    if (!isResizing) {
+      if (!isMouseDown.current) return;
+      const lastMouseX = drawing.x;
+      const lastMouseY = drawing.y;
+      const mouseX = event.clientX - clientCoordinates.current.left;
+      const mouseY = event.clientY - clientCoordinates.current.top;
+      const width = mouseX - lastMouseX;
+      const height = mouseY - lastMouseY;
+      // console.log(mouseX, mouseY, width, height);
+      setDrawing({
+        x: lastMouseX,
+        y: lastMouseY,
+        width: width,
+        height: height,
+      });
+      // console.log(drawing);
+    }
   };
 
   const handleMouseUp = (event: React.MouseEvent) => {
-    isMouseDown.current = false;
-    const lastMouseX = drawing.x;
-    const lastMouseY = drawing.y;
-    const mouseX = event.clientX - clientCoordinates.current.left;
-    const mouseY = event.clientY - clientCoordinates.current.top;
-    const highlight: HighLightType = {
-      id: nextId.current++,
-      x: lastMouseX,
-      y: lastMouseY,
-      width: mouseX - lastMouseX,
-      height: mouseY - lastMouseY,
-    };
-    setHighlights([...highlights, highlight]);
-    setDrawing(blankState);
+    if (!isResizing) {
+      isMouseDown.current = false;
+      const lastMouseX = drawing.x;
+      const lastMouseY = drawing.y;
+      const mouseX = event.clientX - clientCoordinates.current.left;
+      const mouseY = event.clientY - clientCoordinates.current.top;
+      const highlight: HighLightType = {
+        id: nextId.current++,
+        x: lastMouseX,
+        y: lastMouseY,
+        width: mouseX - lastMouseX,
+        height: mouseY - lastMouseY,
+      };
+      setHighlights([...highlights, highlight]);
+      setDrawing(blankState);
+    }
   };
 
   return (
@@ -98,6 +105,7 @@ function Canvas() {
           width={highlight.width}
           height={highlight.height}
           setHighlights={setHighlights}
+          setIsResizing={setIsResizing}
         />
       ))}
     </div>
