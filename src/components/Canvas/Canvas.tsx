@@ -1,19 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 
 import HighLight from "./HighLight";
+import { HighLightType } from "src/App";
 
-export type HighLightType = {
-  id: number;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
+interface Props {
+  highlights: HighLightType[];
+  setHighlights: React.Dispatch<React.SetStateAction<HighLightType[]>>;
+}
 
-function Canvas() {
+function Canvas({ highlights, setHighlights }: Props) {
   const blankState = { x: 1, y: 1, width: 1, height: 1 };
   const [drawing, setDrawing] = useState(blankState);
-  const [highlights, setHighlights] = useState<HighLightType[]>([]);
   const nextId = useRef(0);
 
   const isMouseDown = useRef(false);

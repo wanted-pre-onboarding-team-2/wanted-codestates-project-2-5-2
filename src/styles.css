@@ -3,6 +3,10 @@
   text-align: center;
 }
 
+.container {
+  display: flex;
+}
+
 .canvas {
   background: no-repeat url("/src/assets/image.jpg");
   position: absolute;
@@ -25,4 +29,11 @@
   opacity: 0.3;
   position: absolute;
   cursor: crosshair;
+}
+
+.list {
+  width: 200px;
+  min-height: 100px;
+  background-color: pink;
+  z-index: 100;
 }
